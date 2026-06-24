@@ -1,8 +1,8 @@
 # Backup Build Guide — WSL1 + Docker Desktop (Hyper-V)
 
-*For office machines where WSL2 is unavailable or blocked by IT. Uses Docker Desktop
-with the Hyper-V backend instead of the WSL2 engine. The application stack is
-identical; only the Docker integration and filesystem layout differ.*
+*For machines where WSL2 is unavailable. Uses Docker Desktop with the Hyper-V
+backend instead of the WSL2 engine. The application stack is identical; only the
+Docker integration and filesystem layout differ.*
 
 *Last updated: 2026-06-24.*
 
@@ -17,7 +17,7 @@ Before following this guide, check whether you can simply upgrade in place:
 wsl --set-version Ubuntu 2   # replace "Ubuntu" with your distro name from: wsl -l -v
 ```
 
-Requires virtualization (Hyper-V / VT-x) to be enabled in BIOS and not blocked by IT.
+Requires virtualization (Hyper-V / VT-x) to be enabled in BIOS.
 After that, use `build_guide.md` directly — no changes needed.
 
 **Verify it worked:**
@@ -25,7 +25,7 @@ After that, use `build_guide.md` directly — no changes needed.
 wsl -l -v   # VERSION column must show 2
 ```
 
-**Only continue with this guide if the upgrade fails or is blocked by IT.**
+**Only continue with this guide if the upgrade is unavailable on your machine.**
 
 ---
 
@@ -47,7 +47,7 @@ wsl -l -v   # VERSION column must show 2
 > systeminfo | findstr /i "hyper-v"
 > ```
 > All four lines must say **Yes**. If any say **No** or the command returns nothing,
-> IT has disabled virtualization — request it be enabled before proceeding.
+> virtualization is not enabled — enable it in BIOS settings before proceeding.
 
 ---
 
@@ -338,7 +338,7 @@ dcw build parser-sidecar && dcw up -d parser-sidecar
 | Bind-mount path not found inside container | Path is under `~/` not `/mnt/c/...` — Docker Hyper-V cannot mount WSL1 Linux home |
 | Storage upload permission denied | `chmod 777 $AIPG/dify/docker/volumes/app/storage` from WSL1 |
 | Plugin install "corrupted or network unstable" | Confirm `FORCE_VERIFYING_SIGNATURE=false` in `.env`; confirm `*-offline.difypkg` was uploaded |
-| Hyper-V not available / Docker won't start | IT has blocked virtualization — request enablement; no workaround without it |
+| Hyper-V not available / Docker won't start | Virtualization not enabled in BIOS — enable it and restart; no workaround without it |
 | `dcw` alias not found after opening a new shell | Add the alias to `~/.bashrc` and re-run `source ~/.bashrc` |
 
 ---
