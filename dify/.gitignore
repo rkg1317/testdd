@@ -1,0 +1,15 @@
+# The upstream Dify clone is merged into this directory at runtime (see
+# ../dify_setup_guide.md). Ignore the entire clone EXCEPT our version-controlled
+# artifacts: the sidecar compose override, the env template, and the exported
+# walking-skeleton workflow DSL. The live .env (real secrets) is always ignored.
+
+/*
+!/.gitignore
+!/docker/
+/docker/*
+!/docker/docker-compose.override.yml
+!/docker/.env.dify.example
+/docker/.env
+!/workflows/
+/workflows/*
+!/workflows/skeleton_workflow.yml

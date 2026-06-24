@@ -1,0 +1,31 @@
+# docker-compose.override.yml
+# Extends the official Dify Docker Compose stack with the parser sidecar.
+# Place alongside docker-compose.yaml in dify/docker/.
+# Docker Compose auto-merges this file when you run `docker compose up -d`
+# from the dify/docker/ directory.
+#
+# Design decisions:
+#   - NO `ports:` — sidecar is internal-only (reachable as parser-sidecar:8000
+#     on the Docker default network; never exposed outside the stack).
+#   - Shared volume (read-only) allows the sidecar to read files that the Dify
+#     api service has already written to ./volumes/app/storage.
+#   - build context is relative to this file's location (dify/docker/), so
+#     ../../app/parser_service resolves to the pre-built sidecar source tree.
+
+services:
+  parser-sidecar:
+    build:
+      context: ../../app/parser_service   # relative to dify/docker/
+    container_name: parser-sidecar
+    networks:
+      - default                           # same network as Dify api, worker, etc.
+                                          # sidecar reachable as parser-sidecar:8000
+    volumes:
+      - ./volumes/app/storage:/app/storage:ro   # read uploaded files (read-only)
+      - ../../app/synthetic_data:/synthetic_data:ro  # test fixtures (dev only)
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "python3", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')"]
+      interval: 10s
+      timeout: 5s
+      retries: 3

@@ -1,0 +1,15 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+
+# Virtualenvs
+.venv/
+venv/
+
+# Local secrets
+.env
+
+# Generated synthetic fixtures (reproducible via synthetic_data/generate.py)
+synthetic_data/out/

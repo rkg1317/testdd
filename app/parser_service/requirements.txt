@@ -1,0 +1,22 @@
+# Parser sidecar dependencies.
+# Pinned where it matters for reproducibility; the parse step uses openpyxl
+# (cell-address provenance) and python-docx. pandas/matplotlib/pdfplumber are
+# declared for later phases (compute, charts, PDF) and exercised then.
+
+# --- parse (used now) ---
+openpyxl==3.1.5
+python-docx==1.2.0
+
+# --- compute / charts / pdf (later phases) ---
+pandas==2.2.3
+matplotlib==3.9.2
+pdfplumber==0.11.4
+
+# --- service wrapper ---
+fastapi==0.115.12
+uvicorn[standard]==0.30.6
+python-multipart==0.0.9
+
+# --- dev ---
+pytest==8.3.5
+httpx==0.27.2
